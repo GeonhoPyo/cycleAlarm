@@ -46,7 +46,7 @@ public class SettingActivity extends AppCompatActivity {
                         String number = et_number.getText().toString();
                         String message = et_test.getText().toString();
                         SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(number, null, message, null,
+                        smsManager.sendTextMessage(number, null, message+"\n"+"https://www.google.com/maps/search/37.5840135,127.0247839/data=!4m2!2m1!4b1?hl=ko&nogmmr=1", null,
                                 null);
                         Toast.makeText(SettingActivity.this, "number : " + number + " , message : " + message, Toast.LENGTH_SHORT).show();
 
