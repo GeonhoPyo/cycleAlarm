@@ -30,12 +30,15 @@ import java.util.Collection;
 
 import kr.co.pgbdev.android.cyclealarm.Fragment.ConfirmBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.Fragment.ConnectionBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
+import kr.co.pgbdev.android.cyclealarm.Tool.GPS_Protocol;
 import kr.co.pgbdev.android.cyclealarm.Tool.Utils;
 
 public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
     TextView tv_bluetoothName;
+    ImageView iv_gps;
     ImageView iv_bluetooth;
     ImageView iv_setting;
 
@@ -49,8 +52,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         //Utils 초기화
         Utils.init(getBaseContext());
 
-        checkPermission();
         initBeacon();
+
+        //GPS 수신
+        new GPS_Protocol().googleGpsListener(this);
     }
 
     private void initView(){
@@ -58,15 +63,13 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             tv_bluetoothName = findViewById(R.id.tv_bluetoothName);
             iv_bluetooth = findViewById(R.id.iv_bluetooth);
             iv_setting = findViewById(R.id.iv_setting);
+            iv_gps = findViewById(R.id.iv_gps);
 
             tv_beacon_test = findViewById(R.id.tv_beacon_test);
             iv_bluetooth.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try{
-                        //BottomSheet - Connection
-
-                        //new CheckPermission().checkPermission(getBaseContext(),getSupportFragmentManager());
                         checkPermission();
                     }catch (Exception e){
                         e.printStackTrace();
@@ -84,10 +87,55 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                     }
                 }
             });
+
+            initHandler();
         }catch (Exception e){
             e.printStackTrace();
         }
 
+    }
+
+    public static Handler viewHandler = null;
+    private void initHandler(){
+        try{
+            viewHandler = new Handler(new Handler.Callback() {
+                @Override
+                public boolean handleMessage(@NonNull Message msg) {
+                    try{
+                        switch (msg.what){
+                            case 1 : // 연결 대기, 권한 없음
+                                tv_bluetoothName.setText("연결대기");
+                                tv_bluetoothName.setTextColor(getBaseContext().getResources().getColor(R.color.color_9C9C9C,null));
+                                break;
+                            case 2 : // 연결중
+                                int cnt = (int)msg.obj;
+                                tv_bluetoothName.setText("연결중("+cnt+")");
+                                tv_bluetoothName.setTextColor(getBaseContext().getResources().getColor(R.color.color_9C9C9C,null));
+                                break;
+                            case 3 : // 연결완료
+                                String bluetoothName = (String)msg.obj;
+                                tv_bluetoothName.setText(bluetoothName);
+                                tv_bluetoothName.setTextColor(getBaseContext().getResources().getColor(R.color.key_color_1,null));
+                                break;
+
+                            case 4 : // gps off
+                                iv_gps.setImageDrawable(getBaseContext().getResources().getDrawable(R.drawable.ic_outline_gps_off_24,null));
+                                break;
+
+                            case 5 : // gps on
+                                iv_gps.setImageDrawable(getBaseContext().getResources().getDrawable(R.drawable.ic_outline_near_me_24,null));
+                                break;
+
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     BeaconManager beaconManager;
@@ -154,29 +202,22 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             tv_beacon_test.setText("scanning("+cnt+")");
 
 
-            // 비콘의 아이디와 거리를 측정하여 textView에 넣는다.
-            for(Beacon beacon : beaconList){
-                int txPower = beacon.getTxPower();
-                String uuid=beacon.getId1().toString(); //beacon uuid
-                int major = beacon.getId2().toInt(); //beacon major
-                int minor = beacon.getId3().toInt();// beacon minor
-                String address = beacon.getBluetoothAddress();
+            int getMajor = ContackShared.getMajor(getBaseContext());
+            Dlog.e("getMajor : " + getMajor);
+            if(getMajor != -1){
+                // 비콘의 아이디와 거리를 측정하여 textView에 넣는다.
+                for(Beacon beacon : beaconList){
+                    int txPower = beacon.getTxPower();
+                    String uuid=beacon.getId1().toString(); //beacon uuid
+                    int major = beacon.getId2().toInt(); //beacon major
+                    int minor = beacon.getId3().toInt();// beacon minor
+                    String address = beacon.getBluetoothAddress();
 
-                tv_beacon_test.append("uuid : " + uuid +" , major : " + major +" , minor : " + minor + " , txPower : "+ txPower + ", address : "+ address);
+                    if(major == getMajor){
+                        tv_beacon_test.append("\nuuid : " + uuid +" , major : " + major +" , minor : " + minor + " , txPower : "+ txPower + ", address : "+ address);
+                    }
 
-                /*if(major==40001){
-                    //beacon 의 식별을 위하여 major값으로 확인
-                    //이곳에 필요한 기능 구현
-                    //textView.append("ID 1 : " + beacon.getId2() + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) + "m\n");
-
-                    tv_beacon_test.append("Beacon Bluetooth Id : "+address+"\n");
-                    tv_beacon_test.append("Beacon UUID : "+uuid+"\n");
-
-                }else{
-                    //나머지 비콘검색
-                    tv_beacon_test.append("ID 2: " + beacon.getId2() + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) + "m\n");
-                }*/
-
+                }
             }
 
             // 자기 자신을 1초마다 호출
@@ -187,15 +228,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     ConfirmBottomSheetFragment confirmBottomSheetFragment = null;
     private void checkPermission(){
         try{
-            Dlog.e("test 1111");
-
-            Dlog.e("Utils.isPermission(Manifest.permission.ACCESS_FINE_LOCATION) : " + Utils.isPermission(Manifest.permission.ACCESS_FINE_LOCATION));
-            Dlog.e("Utils.isPermission(Manifest.permission.ACCESS_COARSE_LOCATION) : " + Utils.isPermission(Manifest.permission.ACCESS_COARSE_LOCATION));
-            Dlog.e("Utils.isPermission(Manifest.permission.BLUETOOTH_SCAN) : " + Utils.isPermission(Manifest.permission.BLUETOOTH_SCAN));
-
             if (!(Utils.isPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
                     Utils.isPermission(Manifest.permission.ACCESS_COARSE_LOCATION)||
-                    Utils.isPermission(Manifest.permission.BLUETOOTH_SCAN))){
+                    Utils.isPermission(Manifest.permission.BLUETOOTH_SCAN)||
+                    Utils.isPermission(Manifest.permission.BLUETOOTH_CONNECT))){
                 confirmBottomSheetFragment = new ConfirmBottomSheetFragment("알림", "블루투스 주변 검색시, 위치 권한이 필요로 합니다.\n위치 권한을 허용해 주세요.", false,
                         new View.OnClickListener() {
                             @Override
@@ -207,7 +243,8 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                                             ActivityCompat.requestPermissions(MainActivity.this,new String[]{
                                                             Manifest.permission.ACCESS_FINE_LOCATION,       // 위치 서비스(정확한 위치 판별 | GPS, Wi-Fi 또는 데이터 사용)
                                                             Manifest.permission.ACCESS_COARSE_LOCATION,
-                                                            Manifest.permission.BLUETOOTH_SCAN},
+                                                            Manifest.permission.BLUETOOTH_SCAN,
+                                                            Manifest.permission.BLUETOOTH_CONNECT},
                                                     1000);
                                         }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                                             ActivityCompat.requestPermissions(MainActivity.this,new String[]{
@@ -231,13 +268,15 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                         });
                 confirmBottomSheetFragment.show(getSupportFragmentManager(), confirmBottomSheetFragment.getTag());
             }else{
-                /*ConnectionBottomSheetFragment connectionBottomSheetFragment = new ConnectionBottomSheetFragment();
-                connectionBottomSheetFragment.show(getSupportFragmentManager(), connectionBottomSheetFragment.getTag());*/
+                connectionBottomSheetFragment = new ConnectionBottomSheetFragment();
+                connectionBottomSheetFragment.show(getSupportFragmentManager(), connectionBottomSheetFragment.getTag());
             }
         }catch (Exception e){
             e.printStackTrace();
         }
     }
+
+    public static ConnectionBottomSheetFragment connectionBottomSheetFragment;
 
     private void checkSMS(){
         try{
@@ -321,9 +360,9 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
             if(requestCode == 1000){
                 try{
                     if(grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED){
-                        initBeacon();
-                        /*ConnectionBottomSheetFragment connectionBottomSheetFragment = new ConnectionBottomSheetFragment();
-                        connectionBottomSheetFragment.show(getSupportFragmentManager(), connectionBottomSheetFragment.getTag());*/
+                        connectionBottomSheetFragment = new ConnectionBottomSheetFragment();
+                        connectionBottomSheetFragment.show(getSupportFragmentManager(), connectionBottomSheetFragment.getTag());
+                        new GPS_Protocol().googleGpsListener(getBaseContext());
                     }
 
                 }catch (Exception e){
@@ -339,15 +378,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                     e.printStackTrace();
                 }
             }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    final String uuid = "01 12 23 34 45 56 67 78 89 9A AB BC CD DE EF F0";
-    private void beaconMassage(){
-        try{
-
         }catch (Exception e){
             e.printStackTrace();
         }

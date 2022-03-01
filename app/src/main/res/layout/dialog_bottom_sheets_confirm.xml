@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:text="통신 오류"
                 android:layout_gravity="center_vertical"
-                android:textColor="@color/color_9C9C9C"
+                android:textColor="@color/black"
                 android:textSize="23dp"
                 android:textStyle="bold"/>
         </LinearLayout>
@@ -57,7 +57,7 @@
                 android:id="@+id/tv_bottom_sheet_message"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:textColor="@color/color_9C9C9C"
+                android:textColor="@color/color_5A5A5A"
                 android:textSize="16dp"/>
         </LinearLayout>
     </LinearLayout>

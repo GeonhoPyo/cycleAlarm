@@ -1,5 +1,9 @@
 package kr.co.pgbdev.android.cyclealarm.Fragment;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,7 +23,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -27,9 +39,10 @@ import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.R;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
+import kr.co.pgbdev.android.cyclealarm.Tool.Utils;
 
 
-public class ConnectionBottomSheetFragment extends BottomSheetDialogFragment {
+public class ConnectionBottomSheetFragment extends BottomSheetDialogFragment implements BeaconConsumer {
 
 
     LinearLayout ll_bluetooth_refresh;
@@ -47,12 +60,12 @@ public class ConnectionBottomSheetFragment extends BottomSheetDialogFragment {
         initHandler();
 
         //Scan Bluetooth
-        scanBluetooth();
+        initBeacon();
 
         return view;
     }
 
-    private ScanBluetoothAdapter scanBluetoothAdapter;
+    private ScanBeaconAdapter scanBeaconAdapter;
 
     private void initView(View view){
         try{
@@ -77,8 +90,8 @@ public class ConnectionBottomSheetFragment extends BottomSheetDialogFragment {
             iv_bluetooth_scan_icon = view.findViewById(R.id.iv_bluetooth_scan_icon);
 
             rv_scan_bluetooth_list.setLayoutManager(new LinearLayoutManager(getContext()));
-            scanBluetoothAdapter = new ScanBluetoothAdapter(getContext(),new ArrayList<>(),ContackShared.getConnectBluetoothMacAddress(getContext()));
-            rv_scan_bluetooth_list.setAdapter(scanBluetoothAdapter);
+            scanBeaconAdapter = new ScanBeaconAdapter(getContext(),new ArrayList<>());
+            rv_scan_bluetooth_list.setAdapter(scanBeaconAdapter);
             rv_scan_bluetooth_list.invalidate();
 
 
@@ -98,20 +111,10 @@ public class ConnectionBottomSheetFragment extends BottomSheetDialogFragment {
                     try{
                         switch (msg.what){
                             case 1 :
-                                ArrayList<BluetoothInfo> scanBluetoothArrayList = (ArrayList<BluetoothInfo>)msg.obj;
-                                if(scanBluetoothArrayList != null){
-                                    Collections.sort(scanBluetoothArrayList, new Comparator<BluetoothInfo>() {
-                                        @Override
-                                        public int compare(BluetoothInfo o1, BluetoothInfo o2) {
-                                            if(o1.pairedDate != null && o2.pairedDate != null){
-                                                return o1.pairedDate.compareToIgnoreCase(o2.pairedDate);
-                                            }
-                                            return 1;
-
-                                        }
-                                    });
-                                    scanBluetoothAdapter.setScanBluetoothInfoArrayList(scanBluetoothArrayList);
-                                    scanBluetoothAdapter.notifyDataSetChanged();
+                                ArrayList<Beacon> scanBeaconArrayList = (ArrayList<Beacon>)msg.obj;
+                                if(scanBeaconArrayList != null){
+                                    scanBeaconAdapter.setBeaconArrayList(scanBeaconArrayList);
+                                    scanBeaconAdapter.notifyDataSetChanged();
                                     rv_scan_bluetooth_list.invalidate();
                                 }
                                 break;
@@ -130,12 +133,10 @@ public class ConnectionBottomSheetFragment extends BottomSheetDialogFragment {
                                 BluetoothInfo bluetoothInfoSuccess = (BluetoothInfo)msg.obj;
                                 Dlog.e("ConnectSuccess bluetoothInfoSuccess : " + bluetoothInfoSuccess);
                                 ContackShared.setConnectBluetoothMacAddress(getContext(),bluetoothInfoSuccess.bluetoothMacAddress);
-                                //ContackShared.setPairedBluetoothMap(getContext(),bluetoothInfoSuccess.bluetoothMacAddress,new TimeTool().getPairedDate());
-                                connectStateChange(bluetoothInfoSuccess);
                                 break;
                             case 6 :
                                 BluetoothInfo bluetoothInfoFail = (BluetoothInfo)msg.obj;
-                                connectStateChange(bluetoothInfoFail);
+
 
                                 break;
 
@@ -151,79 +152,132 @@ public class ConnectionBottomSheetFragment extends BottomSheetDialogFragment {
             e.printStackTrace();
         }
     }
-
-    private void scanBluetooth(){
-
-        //new BluetoothLEScanTool().scanBluetooth(getContext());
-
-
-
-
-    }
-
     private void refreshScanBluetooth(){
-
-        //new BluetoothLEScanTool().refreshScanBluetooth(getContext());
-    }
-
-
-    private void connectStateChange(BluetoothInfo bluetoothInfo){
         try{
-            if(bluetoothInfo != null){
-                if(bluetoothInfo.connectState.equals("PAIRED")){
-                    scanBluetoothAdapter.setConnectBluetoothArray(ScanBluetoothAdapter.getScanBluetoothInfoArrayList(),bluetoothInfo);
-                    rv_scan_bluetooth_list.setAdapter(scanBluetoothAdapter);
-                    rv_scan_bluetooth_list.invalidate();
-                }else if(bluetoothInfo.connectState.equals("FAIL")){
-                    scanBluetoothAdapter.setConnectBluetoothArray(ScanBluetoothAdapter.getScanBluetoothInfoArrayList(),bluetoothInfo);
-                    scanBluetoothAdapter.notifyDataSetChanged();
-                    rv_scan_bluetooth_list.invalidate();
-                }
-
+            if(beaconManager != null){
+                beaconManager.unbindInternal(this);
+                beaconManager = null;
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-    }
-    public static void refreshScanRecyclerView(ArrayList<BluetoothInfo> bluetoothInfoArrayList){
-        if(viewHandler != null){
-            viewHandler.obtainMessage(1,bluetoothInfoArrayList).sendToTarget();
-        }
-    }
+        initBeacon();
 
-    public void startScanAnimation(){
-        if(viewHandler != null){
-            viewHandler.obtainMessage(3).sendToTarget();
-        }
     }
-
-    public void stopScanAnimation(){
-        if(viewHandler != null){
-            viewHandler.obtainMessage(4).sendToTarget();
-        }
-    }
-
-    public static void connectSuccess(BluetoothInfo bluetoothInfo){
-        if(viewHandler != null){
-            bluetoothInfo.connectState = "PAIRED";
-            viewHandler.obtainMessage(5,bluetoothInfo).sendToTarget();
-        }
-    }
-
-    public static void connectFail(BluetoothInfo bluetoothInfo){
-        if(viewHandler != null){
-            bluetoothInfo.connectState = "FAIL";
-            viewHandler.obtainMessage(6,bluetoothInfo).sendToTarget();
-        }
-        //new ControllerFragment().setNotConnectDesk();
-    }
-
 
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //new BluetoothLEScanTool().scanStop();
+        try{
+            if(beaconManager != null){
+                beaconManager.unbindInternal(this);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    BeaconManager beaconManager;
+    private void initBeacon(){
+        try{
+            if ((Utils.isPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+                    Utils.isPermission(Manifest.permission.ACCESS_COARSE_LOCATION)&&
+                    Utils.isPermission(Manifest.permission.BLUETOOTH_ADMIN) )){
+                beaconManager = BeaconManager.getInstanceForApplication(getContext());
+                beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+                //beaconManager 설정 bind
+                beaconManager.bindInternal(this);
+
+                handler.sendEmptyMessage(0);
+
+                Handler viewHandler = ConnectionBottomSheetFragment.viewHandler;
+                if(viewHandler != null){
+                    viewHandler.obtainMessage(3).sendToTarget();
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private ArrayList<Beacon> beaconList = new ArrayList<>();
+    @Override
+    public void onBeaconServiceConnect() {
+        beaconManager.addRangeNotifier(new RangeNotifier() {
+            @Override
+            // 비콘이 감지되면 해당 함수가 호출된다. Collection<Beacon> beacons에는 감지된 비콘의 리스트가,
+            // region에는 비콘들에 대응하는 Region 객체가 들어온다.
+            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+                if (beacons.size() > 0) {
+                    beaconList.clear();
+                    for (Beacon beacon : beacons) {
+                        beaconList.add(beacon);
+                    }
+                }
+            }
+
+        });
+
+        try {
+            beaconManager.startRangingBeacons(new Region("myRangingUniqueId", null, null, null));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+
+
+            Handler viewHandler = ConnectionBottomSheetFragment.viewHandler;
+            if(viewHandler != null){
+                viewHandler.obtainMessage(1,beaconList).sendToTarget();
+            }
+
+            // 비콘의 아이디와 거리를 측정하여 textView에 넣는다.
+            for(Beacon beacon : beaconList){
+                int txPower = beacon.getTxPower();
+                String uuid=beacon.getId1().toString(); //beacon uuid
+                int major = beacon.getId2().toInt(); //beacon major
+                int minor = beacon.getId3().toInt();// beacon minor
+                String address = beacon.getBluetoothAddress();
+
+                /*if(major==40001){
+                    //beacon 의 식별을 위하여 major값으로 확인
+                    //이곳에 필요한 기능 구현
+                    //textView.append("ID 1 : " + beacon.getId2() + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) + "m\n");
+
+                    tv_beacon_test.append("Beacon Bluetooth Id : "+address+"\n");
+                    tv_beacon_test.append("Beacon UUID : "+uuid+"\n");
+
+                }else{
+                    //나머지 비콘검색
+                    tv_beacon_test.append("ID 2: " + beacon.getId2() + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) + "m\n");
+                }*/
+
+            }
+
+            // 자기 자신을 1초마다 호출
+            handler.sendEmptyMessageDelayed(0, 1000);
+        }
+    };
+
+    @Override
+    public Context getApplicationContext() {
+        return null;
+    }
+
+    @Override
+    public void unbindService(ServiceConnection connection) {
+
+    }
+
+    @Override
+    public boolean bindService(Intent intent, ServiceConnection connection, int mode) {
+        return false;
     }
 }

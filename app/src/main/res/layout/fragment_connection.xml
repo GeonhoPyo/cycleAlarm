@@ -32,8 +32,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/color_9C9C9C"
-                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:text="Beacon 검색"
+                android:textSize="22dp"
                 android:layout_alignParentLeft="true"
                 android:textStyle="bold"/>
             <LinearLayout
@@ -67,7 +68,7 @@
             android:layout_height="400dp"
             android:minHeight="400dp"
             android:orientation="vertical"
-            tools:listitem="@layout/listitem_bluetooth"/>
+            tools:listitem="@layout/listitem_beacon"/>
 
 
     </LinearLayout>

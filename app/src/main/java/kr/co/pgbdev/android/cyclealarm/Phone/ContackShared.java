@@ -43,4 +43,18 @@ public class ContackShared {
     public static String getConnectBluetoothMacAddress(Context context){
         return getInstance(context).getString(MacAddress, null);
     }
+
+    public static void setMajor (Context context, int major){
+        getEditor(context).putInt("Major",major).apply();
+    }
+    public static int getMajor (Context context){
+        return getInstance(context).getInt("Major",-1);
+    }
+
+    public static void setDistance(Context context, String distance){
+        getEditor(context).putString("Distance",distance).apply();
+    }
+    public static String getDistance(Context context){
+        return getInstance(context).getString("Distance","100m");
+    }
 }

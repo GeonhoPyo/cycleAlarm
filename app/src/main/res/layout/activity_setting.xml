@@ -2,10 +2,90 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:gravity="center"
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_setting_under_line">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="GPS 오차범위"
+                android:textSize="18dp"
+                android:textColor="@color/color_9C9C9C"/>
+
+            <TextView
+                android:id="@+id/tv_gps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="선택"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_setting_under_line">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="전화번호"
+                    android:textSize="18dp"
+                    android:textColor="@color/color_9C9C9C"/>
+
+                <EditText
+                    android:id="@+id/et_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:inputType="phone"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="30dp"
+                    android:textSelectHandle="@color/color_9C9C9C"
+                    android:textColorHighlight="@color/color_9C9C9C"
+                    android:textCursorDrawable="@color/color_9C9C9C"
+                    android:backgroundTint="@color/color_9C9C9C"
+                    android:textSize="20dp"/>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="Test msg"/>
+    </LinearLayout>
+
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -53,7 +133,7 @@
             android:layout_height="wrap_content"
             android:text="보내기"/>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 
 

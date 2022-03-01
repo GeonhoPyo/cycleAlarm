@@ -9,62 +9,86 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.altbeacon.beacon.Beacon;
+
 import java.util.ArrayList;
 
 import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothInfo;
+import kr.co.pgbdev.android.cyclealarm.MainActivity;
+import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.R;
-import kr.co.pgbdev.android.cyclealarm.Tool.TimeTool;
+import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
 
-public class ScanBluetoothAdapter extends RecyclerView.Adapter<ScanBluetoothViewHolder> {
+public class ScanBeaconAdapter extends RecyclerView.Adapter<ScanBeaconViewHolder> {
     Context context;
-    static ArrayList<BluetoothInfo> bluetoothInfoArrayList;
-    String autoConnectMacAddress;
+    static ArrayList<Beacon> beaconArrayList;
 
-    public ScanBluetoothAdapter(Context context, ArrayList<BluetoothInfo> bluetoothInfoArrayList, String macAddress) {
+    public ScanBeaconAdapter(Context context, ArrayList<Beacon> beaconArrayList) {
         this.context = context;
-        this.bluetoothInfoArrayList = bluetoothInfoArrayList;
-        this.autoConnectMacAddress = macAddress;
+        ScanBeaconAdapter.beaconArrayList = beaconArrayList;
     }
 
-    public void setConnectBluetoothArray(ArrayList<BluetoothInfo> bluetoothInfoArrayList, BluetoothInfo setBluetoothInfo) {
-        ArrayList<BluetoothInfo> noneBluetoothArrayList = new ArrayList<>();
-        for (BluetoothInfo bluetoothInfo : bluetoothInfoArrayList) {
-            if (!bluetoothInfo.bluetoothMacAddress.equals(setBluetoothInfo.bluetoothMacAddress)) {
+    public void setConnectBluetoothArray(ArrayList<Beacon> bluetoothInfoArrayList) {
+        ArrayList<Beacon> noneBluetoothArrayList = new ArrayList<>();
+        for (Beacon beacon : bluetoothInfoArrayList) {
+            /*if (!bluetoothInfo.bluetoothMacAddress.equals(setBluetoothInfo.bluetoothMacAddress)) {
                 bluetoothInfo.connectState = "NONE";
                 noneBluetoothArrayList.add(bluetoothInfo);
-            }
+            }*/
         }
-        ArrayList<BluetoothInfo> result = new ArrayList<>();
-        result.add(setBluetoothInfo);
-        result.addAll(noneBluetoothArrayList);
-        this.bluetoothInfoArrayList = result;
+    }
+
+    public void setBeaconArrayList(ArrayList<Beacon> beaconArrayList){
+        ScanBeaconAdapter.beaconArrayList = beaconArrayList;
     }
 
 
-    public void setScanBluetoothInfoArrayList(ArrayList<BluetoothInfo> bluetoothInfoArrayList) {
-        this.bluetoothInfoArrayList = bluetoothInfoArrayList;
-    }
 
-    public static ArrayList<BluetoothInfo> getScanBluetoothInfoArrayList() {
-        return ScanBluetoothAdapter.bluetoothInfoArrayList;
-    }
 
 
     @NonNull
     @Override
-    public ScanBluetoothViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_bluetooth, parent, false);
+    public ScanBeaconViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_beacon, parent, false);
 
-        return new ScanBluetoothViewHolder(view);
+        return new ScanBeaconViewHolder(view);
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @Override
+    public void onBindViewHolder(@NonNull ScanBeaconViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        try{
+            if(beaconArrayList != null && !beaconArrayList.isEmpty()){
+                Beacon beacon = beaconArrayList.get(position);
+                holder.tv_beacon_name.setText(beacon.getId1().toString());
+                int major = beacon.getId2().toInt(); //beacon major
+                int minor = beacon.getId3().toInt();// beacon minor
+                holder.tv_beacon_major.setText(String.valueOf(major));
+                holder.tv_beacon_minor.setText(String.valueOf(minor));
+                holder.rl_beacon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ContackShared.setMajor(context,beaconArrayList.get(position).getId2().toInt());
+                        if(MainActivity.connectionBottomSheetFragment != null){
+                            MainActivity.connectionBottomSheetFragment.dismiss();
+                            MainActivity.connectionBottomSheetFragment = null;
+                        }
+                    }
+                });
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /*@SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public void onBindViewHolder(@NonNull ScanBluetoothViewHolder holder, int position) {
         try {
-            if (bluetoothInfoArrayList != null && !bluetoothInfoArrayList.isEmpty()) {
-                BluetoothInfo bluetoothInfo = bluetoothInfoArrayList.get(position);
+
+
+            if (beaconArrayList != null && !beaconArrayList.isEmpty()) {
+                BluetoothInfo bluetoothInfo = beaconArrayList.get(position);
                 if (bluetoothInfo != null) {
                     holder.tv_bluetooth_name.setText(bluetoothInfo.bluetoothName);
                     holder.ll_bluetooth_state_layout.setVisibility(View.VISIBLE);
@@ -95,7 +119,7 @@ public class ScanBluetoothAdapter extends RecyclerView.Adapter<ScanBluetoothView
                             break;
                     }
 
-                    if (position == bluetoothInfoArrayList.size() - 1) {
+                    if (position == beaconArrayList.size() - 1) {
                         holder.rl_bluetooth_background.setBackground(null);
                     } else {
                         holder.rl_bluetooth_background.setBackground(context.getResources().getDrawable(R.drawable.bg_bluetooth_under_line, null));
@@ -123,7 +147,7 @@ public class ScanBluetoothAdapter extends RecyclerView.Adapter<ScanBluetoothView
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     private void connectBluetooth(BluetoothInfo bluetoothInfo) {
         //new BluetoothLEController().connect(bluetoothInfo);
@@ -131,6 +155,6 @@ public class ScanBluetoothAdapter extends RecyclerView.Adapter<ScanBluetoothView
 
     @Override
     public int getItemCount() {
-        return bluetoothInfoArrayList.size();
+        return beaconArrayList.size();
     }
 }
