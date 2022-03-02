@@ -27,10 +27,12 @@ import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import kr.co.pgbdev.android.cyclealarm.Fragment.ConfirmBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.Fragment.ConnectionBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.Tool.AlarmState;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 import kr.co.pgbdev.android.cyclealarm.Tool.GPS_Protocol;
 import kr.co.pgbdev.android.cyclealarm.Tool.Utils;
@@ -215,6 +217,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
                     if(major == getMajor){
                         tv_beacon_test.append("\nuuid : " + uuid +" , major : " + major +" , minor : " + minor + " , txPower : "+ txPower + ", address : "+ address);
+                        //UUID: 01 12 23 34 45 56 67 78 89 9A AB BC CD DE EF F0
+                        if(uuid.replaceAll("-","").toLowerCase(Locale.ROOT).equals("0112233445566778899AABBCCDDEEFF0".toLowerCase(Locale.ROOT))){
+                            new AlarmState().alarmStart(getBaseContext());
+                        }
                     }
 
                 }
