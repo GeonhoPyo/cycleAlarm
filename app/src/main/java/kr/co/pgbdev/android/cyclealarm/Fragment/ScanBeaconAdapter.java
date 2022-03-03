@@ -73,6 +73,9 @@ public class ScanBeaconAdapter extends RecyclerView.Adapter<ScanBeaconViewHolder
                             MainActivity.connectionBottomSheetFragment.dismiss();
                             MainActivity.connectionBottomSheetFragment = null;
                         }
+                        if(MainActivity.viewHandler != null){
+                            MainActivity.viewHandler.obtainMessage(6).sendToTarget();
+                        }
                     }
                 });
             }

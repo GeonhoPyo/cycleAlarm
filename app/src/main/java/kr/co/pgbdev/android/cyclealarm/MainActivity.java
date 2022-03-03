@@ -18,6 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.MessageListener;
+import com.google.android.gms.nearby.messages.Strategy;
+import com.google.android.gms.nearby.messages.SubscribeOptions;
+
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
@@ -128,6 +133,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                                 iv_gps.setImageDrawable(getBaseContext().getResources().getDrawable(R.drawable.ic_outline_near_me_24,null));
                                 break;
 
+                            case 6 :
+                                initBeacon();
+                                break;
+
                         }
                     }catch (Exception e){
                         e.printStackTrace();
@@ -141,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     }
 
     BeaconManager beaconManager;
+    MessageListener messageListener;
     private void initBeacon(){
         try{
             if ((Utils.isPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
