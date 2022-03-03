@@ -39,7 +39,6 @@ public class ContackShared {
     public static void setConnectBluetoothMacAddress(Context context, String mac){
         getEditor(context).putString(MacAddress,mac).apply();
     }
-
     public static String getConnectBluetoothMacAddress(Context context){
         return getInstance(context).getString(MacAddress, null);
     }

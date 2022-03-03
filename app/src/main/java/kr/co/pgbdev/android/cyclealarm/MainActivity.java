@@ -289,13 +289,17 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                     int major = beacon.getId2().toInt(); //beacon major
                     int minor = beacon.getId3().toInt();// beacon minor
                     String address = beacon.getBluetoothAddress();
+                    String name = beacon.getBluetoothName();
 
                     if(major == getMajor){
-                        tv_beacon_test.append("\nuuid : " + uuid +" , major : " + major +" , minor : " + minor + " , txPower : "+ txPower + ", address : "+ address);
+                        tv_beacon_test.append("\n name : "+name+" , uuid : " + uuid +" , major : " + major +" , minor : " + minor + " , txPower : "+ txPower + ", address : "+ address);
                         //UUID: 01 12 23 34 45 56 67 78 89 9A AB BC CD DE EF F0
-                        if(uuid.replaceAll("-","").toLowerCase(Locale.ROOT).equals("0112233445566778899AABBCCDDEEFF0".toLowerCase(Locale.ROOT))){
+                        /*if(uuid.replaceAll("-","").toLowerCase(Locale.ROOT).equals("0112233445566778899AABBCCDDEEFF0".toLowerCase(Locale.ROOT))){
                             new AlarmState().alarmStart(getBaseContext());
-                        }
+                        }*/
+                        ContackShared.setConnectBluetoothMacAddress(getBaseContext(),address);
+
+                        new AlarmState().alarmStart(getBaseContext());
                     }
 
                 }

@@ -85,38 +85,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="Test msg" />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/bg_setting_under_line"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="30dp"
-                android:text="TEST MODE"
-                android:textColor="@color/color_9C9C9C"
-                android:textSize="18dp" />
-
-            <Switch
-                android:id="@+id/sw_basicSetting_floatingButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:track="@drawable/sw_track"
-                android:thumb="@drawable/sw_thumb"
-                android:switchMinWidth="50dp"
-                android:layout_gravity="center"
-                android:textOff=""
-                android:textOn=""/>
-
-
-        </RelativeLayout>
 
     </LinearLayout>
 

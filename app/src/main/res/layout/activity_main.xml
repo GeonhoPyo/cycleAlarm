@@ -80,6 +80,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/bg_data"
                 android:layout_weight="1">
 
@@ -96,6 +97,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="배터리 상태"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/key_color_1"
                         android:textSize="20dp"
                         android:textStyle="bold" />
@@ -114,6 +117,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
+                android:layout_marginLeft="5dp"
                 android:background="@drawable/bg_data"
                 android:layout_weight="1">
 
@@ -130,6 +134,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="배터리 사용량"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/key_color_1"
                         android:textSize="20dp"
                         android:textStyle="bold" />
@@ -174,6 +180,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="모터 상태"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/key_color_1"
                         android:textSize="20dp"
                         android:textStyle="bold" />
@@ -209,6 +217,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="모터 점검 요청"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/key_color_1"
                         android:textSize="20dp"
                         android:textStyle="bold" />

@@ -130,9 +130,7 @@ public class ConnectionBottomSheetFragment extends BottomSheetDialogFragment imp
                                 break;
 
                             case 5 :
-                                BluetoothInfo bluetoothInfoSuccess = (BluetoothInfo)msg.obj;
-                                Dlog.e("ConnectSuccess bluetoothInfoSuccess : " + bluetoothInfoSuccess);
-                                ContackShared.setConnectBluetoothMacAddress(getContext(),bluetoothInfoSuccess.bluetoothMacAddress);
+
                                 break;
                             case 6 :
                                 BluetoothInfo bluetoothInfoFail = (BluetoothInfo)msg.obj;
