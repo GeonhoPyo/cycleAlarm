@@ -1,9 +1,5 @@
 package kr.co.pgbdev.android.cyclealarm;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,16 +8,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.RemoteException;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.nearby.Nearby;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.nearby.messages.MessageListener;
-import com.google.android.gms.nearby.messages.Strategy;
-import com.google.android.gms.nearby.messages.SubscribeOptions;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -50,6 +46,17 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     ImageView iv_setting;
 
     TextView tv_beacon_test;
+
+    TextView tv_battery_state_title;
+    TextView tv_battery_state;
+    TextView tv_battery_use_title;
+    TextView tv_battery_use;
+    TextView tv_motor_state_title;
+    TextView tv_motor_state;
+    TextView tv_motor_request_title;
+    TextView tv_motor_request;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +102,15 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                 }
             });
 
+            tv_battery_state_title = findViewById(R.id.tv_battery_state_title);
+            tv_battery_state = findViewById(R.id.tv_battery_state);
+            tv_battery_use_title = findViewById(R.id.tv_battery_use_title);
+            tv_battery_use = findViewById(R.id.tv_battery_use);
+            tv_motor_state_title = findViewById(R.id.tv_motor_state_title);
+            tv_motor_state = findViewById(R.id.tv_motor_state);
+            tv_motor_request_title = findViewById(R.id.tv_motor_request_title);
+            tv_motor_request = findViewById(R.id.tv_motor_request);
+
             initHandler();
         }catch (Exception e){
             e.printStackTrace();
@@ -103,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
     }
 
     public static Handler viewHandler = null;
+    public static Handler dataHandler = null;
     private void initHandler(){
         try{
             viewHandler = new Handler(new Handler.Callback() {
@@ -137,6 +154,54 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                                 initBeacon();
                                 break;
 
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try{
+            /**
+             * tv_battery_state_title
+             * tv_battery_state
+             * tv_battery_use_title
+             * tv_battery_use
+             * tv_motor_state_title
+             * tv_motor_state
+             * tv_motor_request_title
+             * tv_motor_request
+             * */
+            dataHandler = new Handler(new Handler.Callback() {
+                @Override
+                public boolean handleMessage(@NonNull Message msg) {
+
+                    try{
+                        switch (msg.what){
+                            case 1 :
+                                //배터리 상태
+                                String batteryState = (String)msg.obj;
+                                tv_battery_state.setText(batteryState);
+                                break;
+                            case 2 :
+                                //배터리 사용량
+                                String batteryUse = (String)msg.obj;
+                                tv_battery_use.setText(batteryUse);
+                                break;
+                            case 3 :
+                                //모터 상태
+                                String motorState = (String)msg.obj;
+                                tv_motor_state.setText(motorState);
+                                break;
+                            case 4 :
+                                //모터 점검 요청
+                                String motorRequest = (String)msg.obj;
+                                tv_motor_request.setText(motorRequest);
+                                break;
                         }
                     }catch (Exception e){
                         e.printStackTrace();
