@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Fragment;
+package kr.co.pgbdev.android.cyclealarm.Fragment.Beacon;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,7 +17,6 @@ import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.MainActivity;
 import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.R;
-import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
 
 public class ScanBeaconAdapter extends RecyclerView.Adapter<ScanBeaconViewHolder> {

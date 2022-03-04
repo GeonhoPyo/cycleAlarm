@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Fragment;
+package kr.co.pgbdev.android.cyclealarm.Fragment.Beacon;
 
 import android.Manifest;
 import android.content.Context;
@@ -32,13 +32,10 @@ import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 
 import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothInfo;
-import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.Fragment.ConfirmBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.R;
-import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 import kr.co.pgbdev.android.cyclealarm.Tool.Utils;
 
 
@@ -101,7 +98,7 @@ public class ConnectionBottomSheetFragment extends BottomSheetDialogFragment imp
     }
 
 
-    private static Handler viewHandler ;
+    public static Handler viewHandler ;
     ConfirmBottomSheetFragment confirmBottomSheetFragment;
     private void initHandler(){
         try{

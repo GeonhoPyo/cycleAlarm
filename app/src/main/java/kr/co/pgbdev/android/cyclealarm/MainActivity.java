@@ -28,10 +28,9 @@ import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Locale;
 
 import kr.co.pgbdev.android.cyclealarm.Fragment.ConfirmBottomSheetFragment;
-import kr.co.pgbdev.android.cyclealarm.Fragment.ConnectionBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.Fragment.Beacon.ConnectionBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.AlarmState;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
