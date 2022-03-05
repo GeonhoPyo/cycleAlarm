@@ -56,6 +56,7 @@ dependencies {
     implementation 'com.jakewharton.rx2:replaying-share:2.2.0'
     implementation 'com.polidea.rxandroidble2:rxandroidble:1.12.1'
     implementation 'org.altbeacon:android-beacon-library:2.+'
+    implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'com.google.android.gms:play-services-location:19.0.1'
     implementation 'com.google.android.gms:play-services-nearby:18.0.2'
     testImplementation 'junit:junit:4.13.2'

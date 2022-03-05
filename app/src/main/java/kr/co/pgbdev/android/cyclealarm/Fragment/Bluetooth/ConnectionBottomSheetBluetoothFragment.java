@@ -27,6 +27,7 @@ import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothLeScanTool.BluetoothLEScanTool;
 import kr.co.pgbdev.android.cyclealarm.Fragment.Beacon.ScanBeaconAdapter;
 import kr.co.pgbdev.android.cyclealarm.Fragment.ConfirmBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.R;
 
 public class ConnectionBottomSheetBluetoothFragment extends BottomSheetDialogFragment {
@@ -52,7 +53,7 @@ public class ConnectionBottomSheetBluetoothFragment extends BottomSheetDialogFra
         return view;
     }
 
-    private ScanBeaconAdapter scanBeaconAdapter;
+    private ScanBluetoothAdapter scanBluetoothAdapter;
 
     private void initView(View view){
         try{
@@ -77,8 +78,8 @@ public class ConnectionBottomSheetBluetoothFragment extends BottomSheetDialogFra
             iv_bluetooth_scan_icon = view.findViewById(R.id.iv_bluetooth_scan_icon);
 
             rv_scan_bluetooth_list.setLayoutManager(new LinearLayoutManager(getContext()));
-            scanBeaconAdapter = new ScanBeaconAdapter(getContext(),new ArrayList<>());
-            rv_scan_bluetooth_list.setAdapter(scanBeaconAdapter);
+            scanBluetoothAdapter = new ScanBluetoothAdapter(getContext(),new ArrayList<>());
+            rv_scan_bluetooth_list.setAdapter(scanBluetoothAdapter);
             rv_scan_bluetooth_list.invalidate();
 
 
@@ -169,7 +170,6 @@ public class ConnectionBottomSheetBluetoothFragment extends BottomSheetDialogFra
 
     }
 
-    private ScanBluetoothAdapter scanBluetoothAdapter;
     private void connectStateChange(BluetoothInfo bluetoothInfo){
         try{
             if(bluetoothInfo != null){

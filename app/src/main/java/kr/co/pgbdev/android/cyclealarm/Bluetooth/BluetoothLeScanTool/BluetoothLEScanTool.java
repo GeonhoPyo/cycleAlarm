@@ -9,12 +9,18 @@ import com.polidea.rxandroidble2.RxBleDevice;
 import com.polidea.rxandroidble2.scan.ScanSettings;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.plugins.RxJavaPlugins;
 import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothLEController;
+import kr.co.pgbdev.android.cyclealarm.Bluetooth.ConnectState;
 import kr.co.pgbdev.android.cyclealarm.Fragment.Beacon.ConnectionBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth.ConnectionBottomSheetBluetoothFragment;
+import kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth.ScanBluetoothAdapter;
+import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
 public class BluetoothLEScanTool {
@@ -22,7 +28,7 @@ public class BluetoothLEScanTool {
 
     public void refreshScanBluetooth(Context context){
         try{
-            //ConnectionBottomSheetFragment.refreshScanRecyclerView(new ArrayList<>());
+            ConnectionBottomSheetBluetoothFragment.refreshScanRecyclerView(new ArrayList<>());
             BluetoothLEController.initRxBleClient();
             scanBluetooth(context);
         }catch (Exception e){
@@ -39,11 +45,20 @@ public class BluetoothLEScanTool {
                 scanStop();
             }
 
-            if(ConnectionBottomSheetFragment.viewHandler != null){
-                ConnectionBottomSheetFragment.viewHandler.obtainMessage(3).sendToTarget();
+            new ConnectionBottomSheetBluetoothFragment().startScanAnimation();
+
+            ArrayList<BluetoothInfo> scanBluetoothArrayList = new ArrayList<>();
+
+            if(ConnectState.connectSuccessBluetoothInfo != null){
+                BluetoothInfo connectedBluetoothInfo = ConnectState.connectSuccessBluetoothInfo;
+                connectedBluetoothInfo.connectState = "PAIRED";
+                Map<String,String> pairedMap = new ContackShared().getPairedBluetoothList(context);
+                if(pairedMap.containsKey(connectedBluetoothInfo.bluetoothMacAddress)){
+                    connectedBluetoothInfo.pairedDate = pairedMap.get(connectedBluetoothInfo.bluetoothMacAddress);
+                }
+                scanBluetoothArrayList.add(ConnectState.connectSuccessBluetoothInfo);
+                ConnectionBottomSheetBluetoothFragment.refreshScanRecyclerView(scanBluetoothArrayList);
             }
-
-
 
 
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -63,7 +78,19 @@ public class BluetoothLEScanTool {
                                     if(device != null && device.getName() != null && device.getMacAddress() != null){
                                         BluetoothInfo bluetoothInfo = new BluetoothInfo(device.getName(), device.getMacAddress(),"NONE",null);
                                         Dlog.e("BluetoothInfo : " + bluetoothInfo);
+                                        ArrayList<BluetoothInfo> scanBluetoothArrayList = ScanBluetoothAdapter.getScanBluetoothInfoArrayList();
+                                        if(!ScanBluetoothAdapter.getScanBluetoothInfoArrayList().contains(bluetoothInfo)){
+                                            Map<String,String> pairedMap = new ContackShared().getPairedBluetoothList(context);
+                                            if(pairedMap ==null){
+                                                pairedMap = new LinkedHashMap<>();
+                                            }
+                                            if(pairedMap.containsKey(bluetoothInfo.bluetoothMacAddress)){
+                                                bluetoothInfo.pairedDate = pairedMap.get(bluetoothInfo.bluetoothMacAddress);
+                                            }
 
+                                            scanBluetoothArrayList.add(bluetoothInfo);
+                                            ConnectionBottomSheetBluetoothFragment.refreshScanRecyclerView(scanBluetoothArrayList);
+                                        }
                                     }
 
                                 },

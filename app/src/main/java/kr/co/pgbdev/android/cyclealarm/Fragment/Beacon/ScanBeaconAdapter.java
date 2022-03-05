@@ -68,10 +68,10 @@ public class ScanBeaconAdapter extends RecyclerView.Adapter<ScanBeaconViewHolder
                     @Override
                     public void onClick(View view) {
                         ContackShared.setMajor(context,beaconArrayList.get(position).getId2().toInt());
-                        if(MainActivity.connectionBottomSheetFragment != null){
+                        /*if(MainActivity.connectionBottomSheetFragment != null){
                             MainActivity.connectionBottomSheetFragment.dismiss();
                             MainActivity.connectionBottomSheetFragment = null;
-                        }
+                        }*/
                         if(MainActivity.viewHandler != null){
                             MainActivity.viewHandler.obtainMessage(6).sendToTarget();
                         }

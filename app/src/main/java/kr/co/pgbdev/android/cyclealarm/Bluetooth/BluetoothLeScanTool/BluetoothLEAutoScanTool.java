@@ -18,12 +18,11 @@ public class BluetoothLEAutoScanTool {
 
     public void startAutoConnect(Context context){
         try{
-            String connectBluetoothMacAddress = ContackShared.getConnectBluetoothMacAddress(context);
+            String connectBluetoothMacAddress = ContackShared.getConnectBeaconAddress(context);
             Dlog.e("connectBluetoothMacAddress : " + connectBluetoothMacAddress);
             if(connectBluetoothMacAddress != null){
                 if ((Utils.isPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
-                        Utils.isPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ||
-                        Utils.isPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION))){
+                        Utils.isPermission(Manifest.permission.ACCESS_COARSE_LOCATION))){
                     if(BluetoothLEScanTool.scanDisposable != null){
                         scanStop();
                     }

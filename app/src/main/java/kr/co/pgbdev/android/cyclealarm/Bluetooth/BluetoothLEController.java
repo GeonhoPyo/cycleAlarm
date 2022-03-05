@@ -105,33 +105,11 @@ public class BluetoothLEController {
                     notifyArray.add(characteristic);
                     notifyCharacteristic = characteristic;
                 }
-                /*String uuid = String.valueOf(characteristic.getUuid());
-                if(uuid.contains("6e400003")){
-                    notifyCharacteristic = characteristic;
-                }else if(uuid.contains("6e400002")){
-                    writeCharacteristic = characteristic;
-                }*/
             }
         }
-        /*if(notifyCharacteristic == null && writeCharacteristic == null){
-            checkNotifyWrite(notifyArray,writeArray);
-        }*/
 
         BluetoothLEController.bluetoothConnectSuccess();
 
-    }
-
-    private static void checkNotifyWrite(ArrayList<BluetoothGattCharacteristic> notifyArray, ArrayList<BluetoothGattCharacteristic> writeArray){
-        try{
-
-            if(!notifyArray.isEmpty()&&!writeArray.isEmpty()){
-                notifyCharacteristic = notifyArray.get(notifyArray.size()-1);
-                writeCharacteristic = writeArray.get(writeArray.size()-1);
-
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
 

@@ -15,20 +15,18 @@ import kr.co.pgbdev.android.cyclealarm.R;
 public class ScanBluetoothViewHolder extends RecyclerView.ViewHolder {
 
 
-    RelativeLayout rl_beacon ;
-    TextView tv_beacon_name;
-    TextView tv_beacon_major;
-    TextView tv_beacon_minor;
+    RelativeLayout rl_bluetooth ;
+    TextView tv_bluetooth_name;
+    TextView tv_bluetooth_mac;
 
 
 
 
     public ScanBluetoothViewHolder(@NonNull View itemView) {
         super(itemView);
-        rl_beacon = itemView.findViewById(R.id.rl_beacon);
-        tv_beacon_name = itemView.findViewById(R.id.tv_beacon_name);
-        tv_beacon_major = itemView.findViewById(R.id.tv_beacon_major);
-        tv_beacon_minor = itemView.findViewById(R.id.tv_beacon_minor);
+        rl_bluetooth = itemView.findViewById(R.id.rl_bluetooth);
+        tv_bluetooth_name = itemView.findViewById(R.id.tv_bluetooth_name);
+        tv_bluetooth_mac = itemView.findViewById(R.id.tv_bluetooth_mac);
 
     }
 }
