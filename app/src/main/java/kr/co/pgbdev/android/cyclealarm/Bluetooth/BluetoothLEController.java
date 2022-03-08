@@ -20,6 +20,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.subjects.PublishSubject;
+import kr.co.pgbdev.android.cyclealarm.MainActivity;
+import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
 public class BluetoothLEController {
@@ -122,6 +124,11 @@ public class BluetoothLEController {
             ConnectState.connectSuccessBluetoothInfo = connectTryBluetoothInfo;
             ConnectState.setConnectSuccess(true);
             new BluetoothLEIOController().getData();
+
+            if(MainActivity.mainContext != null){
+                ContackShared.setConnectBluetoothAddress(MainActivity.mainContext,connectTryBluetoothInfo.bluetoothMacAddress);
+            }
+
 
         }catch (Exception e){
             e.printStackTrace();

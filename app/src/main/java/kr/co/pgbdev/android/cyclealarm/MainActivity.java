@@ -1,6 +1,7 @@
 package kr.co.pgbdev.android.cyclealarm;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     TextView tv_motor_request;
 
 
+    public static Context mainContext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         new GPS_Protocol().googleGpsListener(this);
 
         new BluetoothLEAutoScanTool().startAutoConnect(getBaseContext());
+        mainContext = getBaseContext();
     }
 
     private void initView(){
