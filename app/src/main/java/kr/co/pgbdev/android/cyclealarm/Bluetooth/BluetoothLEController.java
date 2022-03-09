@@ -144,7 +144,7 @@ public class BluetoothLEController {
 
             ConnectState.connectSuccessBluetoothInfo = null;
             ConnectState.setConnecting(false);
-            if(failCount >= 200){
+            if(failCount >= 2000){
                 //ConnectionBottomSheetFragment.connectFail(ConnectState.getConnectTryBluetoothInfo());
                 return false;
             }
