@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
     TextView tv_motor_request_title;
     TextView tv_motor_request;
 
+    RelativeLayout rl_data_1;
+    RelativeLayout rl_data_2;
+    RelativeLayout rl_data_3;
+    RelativeLayout rl_data_4;
+
+
 
     public static Context mainContext;
 
@@ -62,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
         new BluetoothLEAutoScanTool().startAutoConnect(getBaseContext());
         mainContext = getBaseContext();
     }
+
+    boolean click1 = false;
+    boolean click2 = false;
+    boolean click3 = false;
+    boolean click4 = false;
+
 
     private void initView(){
         try{
@@ -101,6 +114,88 @@ public class MainActivity extends AppCompatActivity {
             tv_motor_state = findViewById(R.id.tv_motor_state);
             tv_motor_request_title = findViewById(R.id.tv_motor_request_title);
             tv_motor_request = findViewById(R.id.tv_motor_request);
+
+            rl_data_1 = findViewById(R.id.rl_data_1);
+            rl_data_2 = findViewById(R.id.rl_data_2);
+            rl_data_3 = findViewById(R.id.rl_data_3);
+            rl_data_4 = findViewById(R.id.rl_data_4);
+
+            rl_data_1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try{
+                        if(click1){
+                            if(dataHandler != null){
+                                dataHandler.obtainMessage(1,"Good").sendToTarget();
+                            }
+                        }else{
+                            if(dataHandler != null){
+                                dataHandler.obtainMessage(1,"Bad").sendToTarget();
+                            }
+                        }
+                        click1 = !click1;
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+            rl_data_2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try{
+                        if(click2){
+                            if(dataHandler != null){
+                                dataHandler.obtainMessage(2,"Good").sendToTarget();
+                            }
+                        }else{
+                            if(dataHandler != null){
+                                dataHandler.obtainMessage(2,"Bad").sendToTarget();
+                            }
+                        }
+                        click2 = !click2;
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+            rl_data_3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try{
+                        if(click3){
+                            if(dataHandler != null){
+                                dataHandler.obtainMessage(3,"Good").sendToTarget();
+                            }
+                        }else{
+                            if(dataHandler != null){
+                                dataHandler.obtainMessage(3,"Bad").sendToTarget();
+                            }
+                        }
+                        click3 = !click3;
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+            rl_data_4.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try{
+                        if(click4){
+                            if(dataHandler != null){
+                                dataHandler.obtainMessage(4,"Good").sendToTarget();
+                            }
+                        }else{
+                            if(dataHandler != null){
+                                dataHandler.obtainMessage(4,"Bad").sendToTarget();
+                            }
+                        }
+                        click4 = !click4;
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
 
             initHandler();
         }catch (Exception e){
