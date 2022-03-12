@@ -16,6 +16,7 @@ public class ResponseProtocol {
             response_text.append(stringHex);
             String strResponse = response_text.toString();
             Dlog.e("stringHex : " + stringHex);
+
             if(strResponse.contains("0D0A")){ //0D0A까지 잘라야함.
                 Dlog.e("-----pre Result : "+  strResponse);
                 String[] splitResponse = strResponse.split("0D0A");

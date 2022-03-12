@@ -30,6 +30,8 @@ import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothLeScanTool.BluetoothLEAutoScanTool;
 import kr.co.pgbdev.android.cyclealarm.Fragment.Beacon.ConnectionBottomSheetFragment;
@@ -39,6 +41,7 @@ import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.AlarmState;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 import kr.co.pgbdev.android.cyclealarm.Tool.GPS_Protocol;
+import kr.co.pgbdev.android.cyclealarm.Tool.TimeTool;
 import kr.co.pgbdev.android.cyclealarm.Tool.Utils;
 
 public class MainActivity extends AppCompatActivity implements BeaconConsumer {
@@ -67,8 +70,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
 
     public static Context mainContext;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -287,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
     public static Handler viewHandler = null;
     public static Handler dataHandler = null;
+    private static StringBuilder strTest = new StringBuilder();
     private void initHandler(){
         try{
             viewHandler = new Handler(new Handler.Callback() {
@@ -320,6 +322,16 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
                             case 6 :
                                 //Activitiy finish
                                 MainActivity.this.finish();
+                                break;
+
+                            case 7 : //get BLE Data
+                                String data= (String)msg.obj;
+                                String getRealTime = new TimeTool().getRealTime();
+                                strTest.append(getRealTime);
+                                strTest.append("//");
+                                strTest.append(data);
+                                strTest.append("\n");
+                                tv_beacon_test.setText(strTest.toString());
                                 break;
 
                         }
