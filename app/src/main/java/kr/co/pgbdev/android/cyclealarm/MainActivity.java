@@ -20,9 +20,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothLeScanTool.BluetoothLEAutoScanTool;
-import kr.co.pgbdev.android.cyclealarm.Fragment.Beacon.ConnectionBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth.ConnectionBottomSheetBluetoothFragment;
 import kr.co.pgbdev.android.cyclealarm.Fragment.ConfirmBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.GPS_Protocol;
 import kr.co.pgbdev.android.cyclealarm.Tool.Utils;
 
@@ -58,16 +58,82 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initView();
+
+
+
         //Utils 초기화
         Utils.init(getBaseContext());
-
 
         //GPS 수신
         new GPS_Protocol().googleGpsListener(this);
 
-        new BluetoothLEAutoScanTool().startAutoConnect(getBaseContext());
+
+        boolean BLEVERSION = ContackShared.getBLEVersion(getBaseContext());
+        if(BLEVERSION){
+            initBLEView();
+            new BluetoothLEAutoScanTool().startAutoConnect(getBaseContext());
+        }else{
+            initBeaconView();
+        }
+
+        initHandler();
+
         mainContext = getBaseContext();
+    }
+
+    private void initBeaconView(){
+        try{
+            tv_bluetoothName = findViewById(R.id.tv_bluetoothName);
+            iv_bluetooth = findViewById(R.id.iv_bluetooth);
+            iv_setting = findViewById(R.id.iv_setting);
+            iv_gps = findViewById(R.id.iv_gps);
+
+            tv_beacon_test = findViewById(R.id.tv_beacon_test);
+            iv_bluetooth.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try{
+                        checkPermission();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            iv_setting.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try{
+                        checkSMS();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            tv_battery_state_title = findViewById(R.id.tv_battery_state_title);
+            tv_battery_state = findViewById(R.id.tv_battery_state);
+            tv_battery_use_title = findViewById(R.id.tv_battery_use_title);
+            tv_battery_use = findViewById(R.id.tv_battery_use);
+            tv_motor_state_title = findViewById(R.id.tv_motor_state_title);
+            tv_motor_state = findViewById(R.id.tv_motor_state);
+            tv_motor_request_title = findViewById(R.id.tv_motor_request_title);
+            tv_motor_request = findViewById(R.id.tv_motor_request);
+
+            rl_data_1 = findViewById(R.id.rl_data_1);
+            rl_data_2 = findViewById(R.id.rl_data_2);
+            rl_data_3 = findViewById(R.id.rl_data_3);
+            rl_data_4 = findViewById(R.id.rl_data_4);
+
+            rl_data_1.setVisibility(View.GONE);
+            rl_data_2.setVisibility(View.GONE);
+            rl_data_3.setVisibility(View.GONE);
+            rl_data_4.setVisibility(View.GONE);
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     boolean click1 = false;
@@ -76,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
     boolean click4 = false;
 
 
-    private void initView(){
+    private void initBLEView(){
         try{
             tv_bluetoothName = findViewById(R.id.tv_bluetoothName);
             iv_bluetooth = findViewById(R.id.iv_bluetooth);
@@ -197,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            initHandler();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -237,6 +302,8 @@ public class MainActivity extends AppCompatActivity {
                                 break;
 
                             case 6 :
+                                //Activitiy finish
+                                MainActivity.this.finish();
                                 break;
 
                         }

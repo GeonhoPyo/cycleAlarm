@@ -98,4 +98,13 @@ public class ContackShared {
         }
         return null;
     }
+
+
+    //BLE VERSION
+    public static void setBLEVersion(Context context, boolean bleVersion){
+        getEditor(context).putBoolean("BLEVERSION",bleVersion).apply();
+    }
+    public static boolean getBLEVersion(Context context){
+        return getInstance(context).getBoolean("BLEVERSION",true);
+    }
 }

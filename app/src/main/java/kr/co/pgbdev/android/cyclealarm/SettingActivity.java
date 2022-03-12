@@ -1,6 +1,7 @@
 package kr.co.pgbdev.android.cyclealarm;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
@@ -34,6 +35,8 @@ public class SettingActivity extends AppCompatActivity {
 
     TextView tv_gps;
 
+    Switch sw_version;
+
 
 
     @Override
@@ -46,7 +49,6 @@ public class SettingActivity extends AppCompatActivity {
     private void initView(){
         try{
 
-            //TEST
             btn_test = findViewById(R.id.btn_test);
             btn_test.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -86,6 +88,26 @@ public class SettingActivity extends AppCompatActivity {
                     InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(et_number.getWindowToken(),0);
                     return true;
+                }
+            });
+
+            sw_version = findViewById(R.id.sw_version);
+            sw_version.setChecked(ContackShared.getBLEVersion(getBaseContext()));
+            sw_version.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    try{
+                        ContackShared.setBLEVersion(getBaseContext(),b);
+                        startActivity(new Intent(getApplication(),SplashActivity.class));
+                        if(MainActivity.viewHandler != null){
+                            MainActivity.viewHandler.obtainMessage(6).sendToTarget();
+                        }
+                        SettingActivity.this.finish();
+
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             });
 
