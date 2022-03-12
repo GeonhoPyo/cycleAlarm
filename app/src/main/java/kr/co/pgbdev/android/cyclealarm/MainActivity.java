@@ -19,14 +19,29 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.nearby.messages.MessageListener;
+
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
 import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothLeScanTool.BluetoothLEAutoScanTool;
+import kr.co.pgbdev.android.cyclealarm.Fragment.Beacon.ConnectionBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth.ConnectionBottomSheetBluetoothFragment;
 import kr.co.pgbdev.android.cyclealarm.Fragment.ConfirmBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.Tool.AlarmState;
+import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 import kr.co.pgbdev.android.cyclealarm.Tool.GPS_Protocol;
 import kr.co.pgbdev.android.cyclealarm.Tool.Utils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
     TextView tv_bluetoothName;
     ImageView iv_gps;
@@ -74,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             new BluetoothLEAutoScanTool().startAutoConnect(getBaseContext());
         }else{
             initBeaconView();
+            initBeacon();
         }
 
         initHandler();
@@ -366,11 +382,100 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    BeaconManager beaconManager;
+    private void initBeacon(){
+        try{
+
+            if ((Utils.isPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+                    Utils.isPermission(Manifest.permission.ACCESS_COARSE_LOCATION)&&
+                    Utils.isPermission(Manifest.permission.BLUETOOTH_ADMIN) )){
+                beaconManager = BeaconManager.getInstanceForApplication(this);
+                beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+                //beaconManager 설정 bind
+                beaconManager.bindInternal(this);
+
+                handler.sendEmptyMessage(0);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private ArrayList<Beacon> beaconList = new ArrayList<>();
+    @Override
+    public void onBeaconServiceConnect() {
+        beaconManager.addRangeNotifier(new RangeNotifier() {
+            @Override
+            // 비콘이 감지되면 해당 함수가 호출된다. Collection<Beacon> beacons에는 감지된 비콘의 리스트가,
+            // region에는 비콘들에 대응하는 Region 객체가 들어온다.
+            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+                if (beacons.size() > 0) {
+                    beaconList.clear();
+                    for (Beacon beacon : beacons) {
+                        beaconList.add(beacon);
+                    }
+                }
+            }
+
+        });
+
+        try {
+            beaconManager.startRangingBeacons(new Region("myRangingUniqueId", null, null, null));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        try{
+            if(beaconManager != null){
+                beaconManager.unbindInternal(this);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
+    int cnt = 0;
+    Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            cnt ++;
+
+            tv_beacon_test.setText("scanning("+cnt+")");
+
+
+            int getMajor = ContackShared.getMajor(getBaseContext());
+            if(getMajor != -1){
+                // 비콘의 아이디와 거리를 측정하여 textView에 넣는다.
+                for(Beacon beacon : beaconList){
+                    int txPower = beacon.getTxPower();
+                    String uuid=beacon.getId1().toString(); //beacon uuid
+                    int major = beacon.getId2().toInt(); //beacon major
+                    int minor = beacon.getId3().toInt();// beacon minor
+                    String address = beacon.getBluetoothAddress();
+                    String name = beacon.getBluetoothName();
+
+                    if(major == getMajor){
+                        tv_beacon_test.append("\n name : "+name+" , uuid : " + uuid +" , major : " + major +" , minor : " + minor + " , txPower : "+ txPower + ", address : "+ address);
+                        //UUID: 01 12 23 34 45 56 67 78 89 9A AB BC CD DE EF F0
+                        /*if(uuid.replaceAll("-","").toLowerCase(Locale.ROOT).equals("0112233445566778899AABBCCDDEEFF0".toLowerCase(Locale.ROOT))){
+                            new AlarmState().alarmStart(getBaseContext());
+                        }*/
+                        ContackShared.setConnectBeaconAddress(getBaseContext(),address);
+
+                        new AlarmState().alarmStart(getBaseContext());
+                    }
+
+                }
+            }
+
+            // 자기 자신을 1초마다 호출
+            handler.sendEmptyMessageDelayed(0, 1000);
+        }
+    };
 
     ConfirmBottomSheetFragment confirmBottomSheetFragment = null;
     private void checkPermission(){
@@ -415,8 +520,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                 confirmBottomSheetFragment.show(getSupportFragmentManager(), confirmBottomSheetFragment.getTag());
             }else{
-                connectionBottomSheetBluetoothFragment = new ConnectionBottomSheetBluetoothFragment();
-                connectionBottomSheetBluetoothFragment.show(getSupportFragmentManager(),connectionBottomSheetBluetoothFragment.getTag());
+                showBottomSheet();
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -424,7 +528,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static ConnectionBottomSheetBluetoothFragment connectionBottomSheetBluetoothFragment;
+    public static ConnectionBottomSheetFragment connectionBottomSheetFragment;
 
+    private void showBottomSheet(){
+        try{
+            boolean BLEVERSION = ContackShared.getBLEVersion(getBaseContext());
+            if(BLEVERSION){
+                connectionBottomSheetBluetoothFragment = new ConnectionBottomSheetBluetoothFragment();
+                connectionBottomSheetBluetoothFragment.show(getSupportFragmentManager(),connectionBottomSheetBluetoothFragment.getTag());
+            }else{
+                connectionBottomSheetFragment = new ConnectionBottomSheetFragment();
+                connectionBottomSheetFragment.show(getSupportFragmentManager(),connectionBottomSheetFragment.getTag());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     private void checkSMS(){
         try{
@@ -508,10 +627,7 @@ public class MainActivity extends AppCompatActivity {
             if(requestCode == 1000){
                 try{
                     if(grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED){
-
-                        connectionBottomSheetBluetoothFragment = new ConnectionBottomSheetBluetoothFragment();
-                        connectionBottomSheetBluetoothFragment.show(getSupportFragmentManager(),connectionBottomSheetBluetoothFragment.getTag());
-
+                        showBottomSheet();
                         new GPS_Protocol().googleGpsListener(getBaseContext());
                     }
 
