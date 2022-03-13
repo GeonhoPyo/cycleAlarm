@@ -18,8 +18,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import kr.co.pgbdev.android.cyclealarm.R;
-import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.AlarmState;
+import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 
 public class SettingActivity extends AppCompatActivity {
 

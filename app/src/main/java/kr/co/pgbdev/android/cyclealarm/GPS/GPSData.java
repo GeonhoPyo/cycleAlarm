@@ -1,20 +1,20 @@
-package kr.co.pgbdev.android.cyclealarm.Tool;
+package kr.co.pgbdev.android.cyclealarm.GPS;
 
-public class StateData {
+public class GPSData {
 
     public static double longitude;
     public static double latitude;
 
     public static void setLongitude(double longitude){
-        StateData.longitude = longitude;
+        GPSData.longitude = longitude;
     }
     public static double getLongitude(){
-        return StateData.longitude;
+        return GPSData.longitude;
     }
     public static void setLatitude(double latitude){
-        StateData.latitude = latitude;
+        GPSData.latitude = latitude;
     }
     public static double getLatitude(){
-        return StateData.latitude;
+        return GPSData.latitude;
     }
 }

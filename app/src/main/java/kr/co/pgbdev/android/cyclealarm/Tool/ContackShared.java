@@ -3,12 +3,6 @@ package kr.co.pgbdev.android.cyclealarm.Tool;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public class ContackShared {
 
     static final String Name = "Name";

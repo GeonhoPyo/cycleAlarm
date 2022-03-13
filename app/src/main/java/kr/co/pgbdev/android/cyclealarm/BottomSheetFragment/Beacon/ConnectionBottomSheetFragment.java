@@ -33,8 +33,8 @@ import org.altbeacon.beacon.Region;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Notice.ConfirmBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.R;
 import kr.co.pgbdev.android.cyclealarm.Tool.Utils;
 

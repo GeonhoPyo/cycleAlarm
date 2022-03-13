@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Tool;
+package kr.co.pgbdev.android.cyclealarm.GPS;
 
 import android.Manifest;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -15,6 +16,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import kr.co.pgbdev.android.cyclealarm.Activity.MainActivity;
+import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
 
 /**
@@ -94,8 +97,8 @@ public class GPS_Protocol {
                             viewHandler.obtainMessage(5).sendToTarget();
                         }
                         Dlog.e("longitude : " + location.getLongitude() + " , getLatitude : " + location.getLatitude());
-                        StateData.setLongitude(location.getLongitude());
-                        StateData.setLatitude(location.getLatitude());
+                        GPSData.setLongitude(location.getLongitude());
+                        GPSData.setLatitude(location.getLatitude());
                     }
 
                 }catch (Exception e){

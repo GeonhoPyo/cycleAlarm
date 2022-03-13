@@ -21,9 +21,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 
+import kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Notice.ConfirmBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothLEScanTool;
-import kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Notice.ConfirmBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.R;
 
 public class ConnectionBottomSheetBluetoothFragment extends BottomSheetDialogFragment {

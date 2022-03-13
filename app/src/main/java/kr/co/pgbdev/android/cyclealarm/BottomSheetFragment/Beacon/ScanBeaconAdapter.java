@@ -13,10 +13,10 @@ import org.altbeacon.beacon.Beacon;
 
 import java.util.ArrayList;
 
-import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.Activity.MainActivity;
-import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.R;
+import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 
 
 public class ScanBeaconAdapter extends RecyclerView.Adapter<ScanBeaconViewHolder> {

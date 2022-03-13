@@ -4,6 +4,8 @@ import android.content.Context;
 import android.telephony.SmsManager;
 import android.widget.Toast;
 
+import kr.co.pgbdev.android.cyclealarm.GPS.GPSData;
+
 public class AlarmState {
 
     private static boolean pushMSG = false;
@@ -15,8 +17,8 @@ public class AlarmState {
 
             if(number != null){
                 //location
-                double longitude = StateData.getLongitude();
-                double latitude = StateData.getLatitude();
+                double longitude = GPSData.getLongitude();
+                double latitude = GPSData.getLatitude();
                 if(longitude != 0 && latitude != 0){ //위치 정보가 수신된 경우
                     if(!pushMSG){
                         String message = "https://www.google.com/maps/search/"+latitude+","+longitude+"/data=!4m2!2m1!4b1?hl=ko&nogmmr=1";
