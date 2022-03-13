@@ -1,8 +1,10 @@
 package kr.co.pgbdev.android.cyclealarm.Connection;
 
+import android.content.Context;
 import android.os.Handler;
 
 import kr.co.pgbdev.android.cyclealarm.Activity.MainActivity;
+import kr.co.pgbdev.android.cyclealarm.Tool.AlarmState;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
 public class ResponseProtocol {
@@ -37,6 +39,7 @@ public class ResponseProtocol {
         }
     }
 
+    //배터리 상태
     public void setBatteryState(String data){
         try{
 
@@ -52,6 +55,7 @@ public class ResponseProtocol {
         }
     }
 
+    //배터리 사용량
     public void setBatteryUse(String data){
         try{
             //data -> result
@@ -66,6 +70,7 @@ public class ResponseProtocol {
         }
     }
 
+    //모터 상태
     public void setMotorState(String data){
         try{
             //data -> result
@@ -80,6 +85,7 @@ public class ResponseProtocol {
         }
     }
 
+    //모터 점검 요청
     public void setMotorRequest(String data){
         try{
             //data -> result
@@ -94,7 +100,13 @@ public class ResponseProtocol {
         }
     }
 
+    //send message
+    private void sendMessage(Context context){
+        new AlarmState().alarmStart(context);
+    }
 
+
+    //화면 Response 출력 - 테스트용
     private void sendToMainView(String strData){
         try{
             if(MainActivity.viewHandler != null){
