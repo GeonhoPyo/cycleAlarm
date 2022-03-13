@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Fragment.Beacon;
+package kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Beacon;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,7 +14,7 @@ import org.altbeacon.beacon.Beacon;
 import java.util.ArrayList;
 
 import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
-import kr.co.pgbdev.android.cyclealarm.MainActivity;
+import kr.co.pgbdev.android.cyclealarm.Activity.MainActivity;
 import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.R;
 

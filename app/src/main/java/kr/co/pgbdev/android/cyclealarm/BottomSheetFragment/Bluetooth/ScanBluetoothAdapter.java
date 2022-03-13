@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth;
+package kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Bluetooth;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothLEConnection;
 import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.ConnectState;
-import kr.co.pgbdev.android.cyclealarm.MainActivity;
+import kr.co.pgbdev.android.cyclealarm.Activity.MainActivity;
 import kr.co.pgbdev.android.cyclealarm.R;
 
 

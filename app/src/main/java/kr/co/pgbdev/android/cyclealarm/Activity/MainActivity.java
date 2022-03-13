@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm;
+package kr.co.pgbdev.android.cyclealarm.Activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -30,9 +30,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothLEAutoScanTool;
-import kr.co.pgbdev.android.cyclealarm.Fragment.Beacon.ConnectionBottomSheetFragment;
-import kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth.ConnectionBottomSheetBluetoothFragment;
-import kr.co.pgbdev.android.cyclealarm.Fragment.Notice.ConfirmBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Beacon.ConnectionBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Bluetooth.ConnectionBottomSheetBluetoothFragment;
+import kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Notice.ConfirmBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.R;
 import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.AlarmState;
 import kr.co.pgbdev.android.cyclealarm.Tool.GPS_Protocol;

@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth;
+package kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Bluetooth;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,12 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothLEScanTool;
-import kr.co.pgbdev.android.cyclealarm.Fragment.Notice.ConfirmBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Notice.ConfirmBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.R;
 
 public class ConnectionBottomSheetBluetoothFragment extends BottomSheetDialogFragment {

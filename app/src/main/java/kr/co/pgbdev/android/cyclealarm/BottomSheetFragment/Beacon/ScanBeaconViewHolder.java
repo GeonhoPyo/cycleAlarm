@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Fragment.Beacon;
+package kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Beacon;
 
 import android.view.View;
 import android.widget.RelativeLayout;

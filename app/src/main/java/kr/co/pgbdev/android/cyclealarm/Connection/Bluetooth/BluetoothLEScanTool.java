@@ -9,15 +9,12 @@ import com.polidea.rxandroidble2.RxBleDevice;
 import com.polidea.rxandroidble2.scan.ScanSettings;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.plugins.RxJavaPlugins;
-import kr.co.pgbdev.android.cyclealarm.Fragment.Beacon.ConnectionBottomSheetFragment;
-import kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth.ConnectionBottomSheetBluetoothFragment;
-import kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth.ScanBluetoothAdapter;
-import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Beacon.ConnectionBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Bluetooth.ConnectionBottomSheetBluetoothFragment;
+import kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Bluetooth.ScanBluetoothAdapter;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
 public class BluetoothLEScanTool {

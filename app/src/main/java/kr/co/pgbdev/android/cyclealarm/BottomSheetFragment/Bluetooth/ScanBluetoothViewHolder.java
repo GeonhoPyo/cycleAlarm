@@ -1,8 +1,6 @@
-package kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth;
+package kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Bluetooth;
 
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 

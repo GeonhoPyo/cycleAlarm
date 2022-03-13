@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Fragment.Beacon;
+package kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Beacon;
 
 import android.Manifest;
 import android.content.Context;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
-import kr.co.pgbdev.android.cyclealarm.Fragment.Notice.ConfirmBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.BottomSheetFragment.Notice.ConfirmBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.R;
 import kr.co.pgbdev.android.cyclealarm.Tool.Utils;
 

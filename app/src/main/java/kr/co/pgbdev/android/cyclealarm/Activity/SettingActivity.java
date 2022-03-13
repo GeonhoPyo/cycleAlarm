@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm;
+package kr.co.pgbdev.android.cyclealarm.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import kr.co.pgbdev.android.cyclealarm.R;
 import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.AlarmState;
 

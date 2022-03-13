@@ -2,7 +2,7 @@ package kr.co.pgbdev.android.cyclealarm.Connection;
 
 import android.os.Handler;
 
-import kr.co.pgbdev.android.cyclealarm.MainActivity;
+import kr.co.pgbdev.android.cyclealarm.Activity.MainActivity;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
 public class ResponseProtocol {

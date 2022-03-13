@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CycleAlarm">
         <activity
-            android:name=".SplashActivity"
+            android:name=".Activity.SplashActivity"
             android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
@@ -31,13 +31,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".Activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait"
             android:supportsPictureInPicture="true"
             android:theme="@style/Theme.CycleAlarm.Main"
             tools:ignore="UnusedAttribute" />
-        <activity android:name=".SettingActivity"
+        <activity android:name=".Activity.SettingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait"
             android:supportsPictureInPicture="true"

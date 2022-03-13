@@ -20,7 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.subjects.PublishSubject;
-import kr.co.pgbdev.android.cyclealarm.MainActivity;
+import kr.co.pgbdev.android.cyclealarm.Activity.MainActivity;
 import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
