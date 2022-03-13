@@ -19,8 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.nearby.messages.MessageListener;
-
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
@@ -30,16 +28,13 @@ import org.altbeacon.beacon.Region;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothLeScanTool.BluetoothLEAutoScanTool;
+import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothLEAutoScanTool;
 import kr.co.pgbdev.android.cyclealarm.Fragment.Beacon.ConnectionBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth.ConnectionBottomSheetBluetoothFragment;
-import kr.co.pgbdev.android.cyclealarm.Fragment.ConfirmBottomSheetFragment;
-import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.Fragment.Notice.ConfirmBottomSheetFragment;
+import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.AlarmState;
-import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 import kr.co.pgbdev.android.cyclealarm.Tool.GPS_Protocol;
 import kr.co.pgbdev.android.cyclealarm.Tool.TimeTool;
 import kr.co.pgbdev.android.cyclealarm.Tool.Utils;
@@ -346,16 +341,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
         }
 
         try{
-            /**
-             * tv_battery_state_title
-             * tv_battery_state
-             * tv_battery_use_title
-             * tv_battery_use
-             * tv_motor_state_title
-             * tv_motor_state
-             * tv_motor_request_title
-             * tv_motor_request
-             * */
             dataHandler = new Handler(new Handler.Callback() {
                 @Override
                 public boolean handleMessage(@NonNull Message msg) {
@@ -461,7 +446,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
             int getMajor = ContackShared.getMajor(getBaseContext());
             if(getMajor != -1){
-                // 비콘의 아이디와 거리를 측정하여 textView에 넣는다.
                 for(Beacon beacon : beaconList){
                     int txPower = beacon.getTxPower();
                     String uuid=beacon.getId1().toString(); //beacon uuid
@@ -472,12 +456,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer {
 
                     if(major == getMajor){
                         tv_beacon_test.append("\n name : "+name+" , uuid : " + uuid +" , major : " + major +" , minor : " + minor + " , txPower : "+ txPower + ", address : "+ address);
-                        //UUID: 01 12 23 34 45 56 67 78 89 9A AB BC CD DE EF F0
-                        /*if(uuid.replaceAll("-","").toLowerCase(Locale.ROOT).equals("0112233445566778899AABBCCDDEEFF0".toLowerCase(Locale.ROOT))){
-                            new AlarmState().alarmStart(getBaseContext());
-                        }*/
                         ContackShared.setConnectBeaconAddress(getBaseContext(),address);
-
                         new AlarmState().alarmStart(getBaseContext());
                     }
 

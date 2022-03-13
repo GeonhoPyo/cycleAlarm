@@ -3,9 +3,7 @@ package kr.co.pgbdev.android.cyclealarm;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.telephony.SmsManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,15 +12,13 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.AlarmState;
-import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -37,6 +33,9 @@ public class SettingActivity extends AppCompatActivity {
 
     Switch sw_version;
 
+
+    private String[] distance = {"50m","100m","150m","200m","250m","300m","500m"};
+    private AlertDialog alertDialog = null;
 
 
     @Override
@@ -123,7 +122,6 @@ public class SettingActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             try{
                                 String selectDistance = distance[i];
-                                int integerDistance = Integer.parseInt(selectDistance.replaceAll("m",""));
                                 tv_gps.setText(selectDistance);
                                 ContackShared.setDistance(getBaseContext(),selectDistance);
 
@@ -141,6 +139,4 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
-    private String[] distance = {"50m","100m","150m","200m","250m","300m","500m"};
-    private AlertDialog alertDialog = null;
 }

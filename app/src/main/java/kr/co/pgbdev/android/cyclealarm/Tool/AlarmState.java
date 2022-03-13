@@ -4,8 +4,6 @@ import android.content.Context;
 import android.telephony.SmsManager;
 import android.widget.Toast;
 
-import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
-
 public class AlarmState {
 
     private static boolean pushMSG = false;

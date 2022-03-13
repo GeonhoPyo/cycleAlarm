@@ -13,9 +13,9 @@ import org.altbeacon.beacon.Beacon;
 
 import java.util.ArrayList;
 
-import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothInfo;
+import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
 import kr.co.pgbdev.android.cyclealarm.MainActivity;
-import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.R;
 
 
@@ -26,16 +26,6 @@ public class ScanBeaconAdapter extends RecyclerView.Adapter<ScanBeaconViewHolder
     public ScanBeaconAdapter(Context context, ArrayList<Beacon> beaconArrayList) {
         this.context = context;
         ScanBeaconAdapter.beaconArrayList = beaconArrayList;
-    }
-
-    public void setConnectBluetoothArray(ArrayList<Beacon> bluetoothInfoArrayList) {
-        ArrayList<Beacon> noneBluetoothArrayList = new ArrayList<>();
-        for (Beacon beacon : bluetoothInfoArrayList) {
-            /*if (!bluetoothInfo.bluetoothMacAddress.equals(setBluetoothInfo.bluetoothMacAddress)) {
-                bluetoothInfo.connectState = "NONE";
-                noneBluetoothArrayList.add(bluetoothInfo);
-            }*/
-        }
     }
 
     public void setBeaconArrayList(ArrayList<Beacon> beaconArrayList){
@@ -68,12 +58,9 @@ public class ScanBeaconAdapter extends RecyclerView.Adapter<ScanBeaconViewHolder
                     @Override
                     public void onClick(View view) {
                         ContackShared.setMajor(context,beaconArrayList.get(position).getId2().toInt());
-                        /*if(MainActivity.connectionBottomSheetFragment != null){
+                        if(MainActivity.connectionBottomSheetFragment != null){
                             MainActivity.connectionBottomSheetFragment.dismiss();
                             MainActivity.connectionBottomSheetFragment = null;
-                        }*/
-                        if(MainActivity.viewHandler != null){
-                            MainActivity.viewHandler.obtainMessage(6).sendToTarget();
                         }
                     }
                 });

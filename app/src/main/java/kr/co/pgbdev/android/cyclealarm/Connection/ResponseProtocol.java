@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Bluetooth;
+package kr.co.pgbdev.android.cyclealarm.Connection;
 
 import android.os.Handler;
 
@@ -16,6 +16,7 @@ public class ResponseProtocol {
             response_text.append(stringHex);
             String strResponse = response_text.toString();
             Dlog.e("stringHex : " + stringHex);
+            sendToMainView(stringHex);
 
             if(strResponse.contains("0D0A")){ //0D0A까지 잘라야함.
                 Dlog.e("-----pre Result : "+  strResponse);
@@ -87,6 +88,17 @@ public class ResponseProtocol {
             Handler dataHandler =MainActivity.dataHandler;
             if(dataHandler != null){
                 dataHandler.obtainMessage(4,result).sendToTarget();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    private void sendToMainView(String strData){
+        try{
+            if(MainActivity.viewHandler != null){
+                MainActivity.viewHandler.obtainMessage(7,strData).sendToTarget();
             }
         }catch (Exception e){
             e.printStackTrace();

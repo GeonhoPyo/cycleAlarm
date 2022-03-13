@@ -23,11 +23,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothInfo;
-import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothLeScanTool.BluetoothLEScanTool;
-import kr.co.pgbdev.android.cyclealarm.Fragment.Beacon.ScanBeaconAdapter;
-import kr.co.pgbdev.android.cyclealarm.Fragment.ConfirmBottomSheetFragment;
-import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
+import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothLEScanTool;
+import kr.co.pgbdev.android.cyclealarm.Fragment.Notice.ConfirmBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.R;
 
 public class ConnectionBottomSheetBluetoothFragment extends BottomSheetDialogFragment {
@@ -101,16 +99,6 @@ public class ConnectionBottomSheetBluetoothFragment extends BottomSheetDialogFra
                             case 1 :
                                 ArrayList<BluetoothInfo> scanBluetoothArrayList = (ArrayList<BluetoothInfo>)msg.obj;
                                 if(scanBluetoothArrayList != null){
-                                    Collections.sort(scanBluetoothArrayList, new Comparator<BluetoothInfo>() {
-                                        @Override
-                                        public int compare(BluetoothInfo o1, BluetoothInfo o2) {
-                                            if(o1.pairedDate != null && o2.pairedDate != null){
-                                                return o1.pairedDate.compareToIgnoreCase(o2.pairedDate);
-                                            }
-                                            return 1;
-
-                                        }
-                                    });
                                     scanBluetoothAdapter.setScanBluetoothInfoArrayList(scanBluetoothArrayList);
                                     scanBluetoothAdapter.notifyDataSetChanged();
                                     rv_scan_bluetooth_list.invalidate();

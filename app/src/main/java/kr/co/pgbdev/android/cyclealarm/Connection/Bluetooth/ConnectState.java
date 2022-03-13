@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Bluetooth;
+package kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth;
 
 public class ConnectState {
 

@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothInfo;
-import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothLEController;
-import kr.co.pgbdev.android.cyclealarm.Bluetooth.ConnectState;
+import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothInfo;
+import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.BluetoothLEConnection;
+import kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth.ConnectState;
 import kr.co.pgbdev.android.cyclealarm.MainActivity;
 import kr.co.pgbdev.android.cyclealarm.R;
 
@@ -94,7 +94,7 @@ public class ScanBluetoothAdapter extends RecyclerView.Adapter<ScanBluetoothView
                         public void onClick(View v) {
                             try{
                                 if(ConnectState.isConnectSuccess()){
-                                    new BluetoothLEController().connectFinish();
+                                    new BluetoothLEConnection().connectFinish();
                                 }
 
                                 if(bluetoothInfo != null){
@@ -121,7 +121,7 @@ public class ScanBluetoothAdapter extends RecyclerView.Adapter<ScanBluetoothView
     }
 
     private void connectBluetooth(BluetoothInfo bluetoothInfo){
-        new BluetoothLEController().connect(bluetoothInfo);
+        new BluetoothLEConnection().connect(bluetoothInfo);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Bluetooth;
+package kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -21,10 +21,10 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.subjects.PublishSubject;
 import kr.co.pgbdev.android.cyclealarm.MainActivity;
-import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
-public class BluetoothLEController {
+public class BluetoothLEConnection {
 
     //client
     private static RxBleClient rxBleClient = null;
@@ -68,11 +68,11 @@ public class BluetoothLEController {
                         .timeout(2000, TimeUnit.MILLISECONDS)
                         .takeUntil(disconnectTriggerSubject)
                         .compose(ReplayingShare.instance())
-                        .retryWhen(new RetryWithDelay(200, 100))
+                        .retryWhen(new RetryWithDelay(2000, 100))
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                BluetoothLEController::swapScanResult,
-                                BluetoothLEController::onConnectionFailure
+                                BluetoothLEConnection::swapScanResult,
+                                BluetoothLEConnection::onConnectionFailure
                         );
             }else{
                 //연결중..
@@ -110,7 +110,7 @@ public class BluetoothLEController {
             }
         }
 
-        BluetoothLEController.bluetoothConnectSuccess();
+        BluetoothLEConnection.bluetoothConnectSuccess();
 
     }
 

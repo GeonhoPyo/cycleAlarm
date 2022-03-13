@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Phone;
+package kr.co.pgbdev.android.cyclealarm.Tool;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -68,35 +68,6 @@ public class ContackShared {
     }
     public static String getDistance(Context context){
         return getInstance(context).getString("Distance","100m");
-    }
-
-    //Paired Bluetooth List
-    private final String PairedBluetoothMap = "PairedBluetoothMap";
-    public void setPairedBluetoothMap(Context context, String macAddress, String strDate){
-        Map<String,String> pairedBluetoothMap = getPairedBluetoothList(context);
-        if(pairedBluetoothMap==null){
-            pairedBluetoothMap = new LinkedHashMap<>();
-        }
-        pairedBluetoothMap.put(macAddress,strDate);
-
-        Gson gson = new Gson();
-        String strPairedBluetoothArrayList = gson.toJson(pairedBluetoothMap);
-        getEditor(context).putString(PairedBluetoothMap,strPairedBluetoothArrayList).apply();
-    }
-
-    public Map<String,String> getPairedBluetoothList(Context context){
-        String strGson = getInstance(context).getString(PairedBluetoothMap,null);
-        if(strGson != null){
-            java.lang.reflect.Type type = new TypeToken<Map<String,String>>(){}.getType();
-            Gson gson = new Gson();
-            Map<String,String> pairedBluetoothMap = gson.fromJson(strGson,type);
-            if(pairedBluetoothMap != null){
-                return pairedBluetoothMap;
-            }else {
-                return new LinkedHashMap<>();
-            }
-        }
-        return null;
     }
 
 

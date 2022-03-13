@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothLeScanTool;
+package kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth;
 
 import android.content.Context;
 import android.os.Handler;
@@ -14,13 +14,10 @@ import java.util.Map;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.plugins.RxJavaPlugins;
-import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothInfo;
-import kr.co.pgbdev.android.cyclealarm.Bluetooth.BluetoothLEController;
-import kr.co.pgbdev.android.cyclealarm.Bluetooth.ConnectState;
 import kr.co.pgbdev.android.cyclealarm.Fragment.Beacon.ConnectionBottomSheetFragment;
 import kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth.ConnectionBottomSheetBluetoothFragment;
 import kr.co.pgbdev.android.cyclealarm.Fragment.Bluetooth.ScanBluetoothAdapter;
-import kr.co.pgbdev.android.cyclealarm.Phone.ContackShared;
+import kr.co.pgbdev.android.cyclealarm.Tool.ContackShared;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
 public class BluetoothLEScanTool {
@@ -29,7 +26,7 @@ public class BluetoothLEScanTool {
     public void refreshScanBluetooth(Context context){
         try{
             ConnectionBottomSheetBluetoothFragment.refreshScanRecyclerView(new ArrayList<>());
-            BluetoothLEController.initRxBleClient();
+            BluetoothLEConnection.initRxBleClient();
             scanBluetooth(context);
         }catch (Exception e){
             e.printStackTrace();
@@ -52,10 +49,6 @@ public class BluetoothLEScanTool {
             if(ConnectState.connectSuccessBluetoothInfo != null){
                 BluetoothInfo connectedBluetoothInfo = ConnectState.connectSuccessBluetoothInfo;
                 connectedBluetoothInfo.connectState = "PAIRED";
-                Map<String,String> pairedMap = new ContackShared().getPairedBluetoothList(context);
-                if(pairedMap.containsKey(connectedBluetoothInfo.bluetoothMacAddress)){
-                    connectedBluetoothInfo.pairedDate = pairedMap.get(connectedBluetoothInfo.bluetoothMacAddress);
-                }
                 scanBluetoothArrayList.add(ConnectState.connectSuccessBluetoothInfo);
                 ConnectionBottomSheetBluetoothFragment.refreshScanRecyclerView(scanBluetoothArrayList);
             }
@@ -66,7 +59,7 @@ public class BluetoothLEScanTool {
                 public void run() {
                     try{
                         RxJavaPlugins.setErrorHandler(Throwable::printStackTrace);
-                        RxBleClient rxBleClient = BluetoothLEController.getRxBleClient(context);
+                        RxBleClient rxBleClient = BluetoothLEConnection.getRxBleClient(context);
                         scanDisposable = rxBleClient.scanBleDevices(
                                 new ScanSettings.Builder()
                                         .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
@@ -76,18 +69,10 @@ public class BluetoothLEScanTool {
                                     RxBleDevice device = scanResult.getBleDevice();
 
                                     if(device != null && device.getName() != null && device.getMacAddress() != null){
-                                        BluetoothInfo bluetoothInfo = new BluetoothInfo(device.getName(), device.getMacAddress(),"NONE",null);
+                                        BluetoothInfo bluetoothInfo = new BluetoothInfo(device.getName(), device.getMacAddress(),"NONE");
                                         Dlog.e("BluetoothInfo : " + bluetoothInfo);
                                         ArrayList<BluetoothInfo> scanBluetoothArrayList = ScanBluetoothAdapter.getScanBluetoothInfoArrayList();
                                         if(!ScanBluetoothAdapter.getScanBluetoothInfoArrayList().contains(bluetoothInfo)){
-                                            Map<String,String> pairedMap = new ContackShared().getPairedBluetoothList(context);
-                                            if(pairedMap ==null){
-                                                pairedMap = new LinkedHashMap<>();
-                                            }
-                                            if(pairedMap.containsKey(bluetoothInfo.bluetoothMacAddress)){
-                                                bluetoothInfo.pairedDate = pairedMap.get(bluetoothInfo.bluetoothMacAddress);
-                                            }
-
                                             scanBluetoothArrayList.add(bluetoothInfo);
                                             ConnectionBottomSheetBluetoothFragment.refreshScanRecyclerView(scanBluetoothArrayList);
                                         }

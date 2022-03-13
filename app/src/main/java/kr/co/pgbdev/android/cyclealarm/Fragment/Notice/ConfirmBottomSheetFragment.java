@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Fragment;
+package kr.co.pgbdev.android.cyclealarm.Fragment.Notice;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

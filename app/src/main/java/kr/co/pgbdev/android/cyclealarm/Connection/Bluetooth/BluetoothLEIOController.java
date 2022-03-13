@@ -1,4 +1,4 @@
-package kr.co.pgbdev.android.cyclealarm.Bluetooth;
+package kr.co.pgbdev.android.cyclealarm.Connection.Bluetooth;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 
@@ -8,6 +8,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.plugins.RxJavaPlugins;
+import kr.co.pgbdev.android.cyclealarm.Connection.ResponseProtocol;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
 
 public class BluetoothLEIOController {
@@ -27,7 +28,7 @@ public class BluetoothLEIOController {
     public void getData() {
         RxJavaPlugins.setErrorHandler(Throwable::printStackTrace);
         notificationData = connectionObservable
-                .flatMap(rxBleConnection -> rxBleConnection.setupNotification(BluetoothLEController.getNotifyCharacteristic().getUuid()))
+                .flatMap(rxBleConnection -> rxBleConnection.setupNotification(BluetoothLEConnection.getNotifyCharacteristic().getUuid()))
                 .flatMap(notificationObservable -> notificationObservable)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onNotificationReceived,
@@ -59,7 +60,7 @@ public class BluetoothLEIOController {
      * */
     public void dataWrite(byte[] data){
         if(ConnectState.isConnectSuccess()){
-            setWrite(BluetoothLEController.getWriteCharacteristic(),data);
+            setWrite(BluetoothLEConnection.getWriteCharacteristic(),data);
 
         }else{
             Dlog.e("Not Connect");
@@ -67,7 +68,7 @@ public class BluetoothLEIOController {
     }
     public void strDataWrite(String data){
         if(ConnectState.isConnectSuccess()){
-            setWrite(BluetoothLEController.getWriteCharacteristic(),(data+"\r\n").getBytes());
+            setWrite(BluetoothLEConnection.getWriteCharacteristic(),(data+"\r\n").getBytes());
         }else{
             Dlog.e("Not Connect");
         }
