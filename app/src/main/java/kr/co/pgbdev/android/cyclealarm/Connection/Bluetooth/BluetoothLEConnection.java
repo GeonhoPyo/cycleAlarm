@@ -11,6 +11,7 @@ import com.polidea.rxandroidble2.RxBleConnection;
 import com.polidea.rxandroidble2.RxBleDevice;
 import com.polidea.rxandroidble2.RxBleDeviceServices;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -123,6 +124,7 @@ public class BluetoothLEConnection {
             connectTryBluetoothInfo.connectState = "PAIRED";
             ConnectState.connectSuccessBluetoothInfo = connectTryBluetoothInfo;
             ConnectState.setConnectSuccess(true);
+            new BluetoothLEIOController().dataWrite("ATZ\r".getBytes(StandardCharsets.UTF_8));
             new BluetoothLEIOController().getData();
 
             if(MainActivity.mainContext != null){

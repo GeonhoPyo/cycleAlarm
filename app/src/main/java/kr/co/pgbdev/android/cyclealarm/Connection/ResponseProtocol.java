@@ -3,6 +3,8 @@ package kr.co.pgbdev.android.cyclealarm.Connection;
 import android.content.Context;
 import android.os.Handler;
 
+import java.nio.charset.StandardCharsets;
+
 import kr.co.pgbdev.android.cyclealarm.Activity.MainActivity;
 import kr.co.pgbdev.android.cyclealarm.Tool.AlarmState;
 import kr.co.pgbdev.android.cyclealarm.Tool.Dlog;
@@ -11,14 +13,18 @@ public class ResponseProtocol {
     private static StringBuilder response_text = new StringBuilder();
     public void bleTestDataRead(byte[] responseData){
         try{
+            String data = new String(responseData, StandardCharsets.UTF_8);
+            Dlog.e("data : " + data);
             String stringHex = new ProtocolTool().byteArrayToHex(responseData);
+            Dlog.e("stringHex : " + stringHex);
             if(response_text == null){
                 response_text = new StringBuilder();
             }
             response_text.append(stringHex);
             String strResponse = response_text.toString();
-            Dlog.e("stringHex : " + stringHex);
-            sendToMainView(stringHex);
+
+            sendToMainView("to String : "+data);
+            sendToMainView("byteArray to Hex : "+stringHex);
 
             if(strResponse.contains("0D0A")){ //0D0A까지 잘라야함.
                 Dlog.e("-----pre Result : "+  strResponse);
