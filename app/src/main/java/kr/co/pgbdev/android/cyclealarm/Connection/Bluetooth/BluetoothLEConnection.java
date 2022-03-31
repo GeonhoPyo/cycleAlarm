@@ -124,6 +124,7 @@ public class BluetoothLEConnection {
             connectTryBluetoothInfo.connectState = "PAIRED";
             ConnectState.connectSuccessBluetoothInfo = connectTryBluetoothInfo;
             ConnectState.setConnectSuccess(true);
+            //OBD2 테스트용
             //new BluetoothLEIOController().dataWrite("ATZ\r".getBytes(StandardCharsets.UTF_8));
             new BluetoothLEIOController().getData();
 
